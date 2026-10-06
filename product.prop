@@ -42,6 +42,3 @@ persist.audio.fluence.voicerec=false
 persist.audio.fluence.speaker=true
 audio.sys.offload.pstimeout.secs=3
 persist.audio.fluence.voicecomm=true
-
-# Boot animation in landscape (the panel's natural orientation is portrait)
-ro.bootanim.set_orientation_logical_0=ORIENTATION_90

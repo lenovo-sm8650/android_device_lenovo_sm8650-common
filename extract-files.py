@@ -18,7 +18,7 @@ from extract_utils.main import (
 )
 
 namespace_imports = [
-    'device/lenovo/TB520FU',
+    'device/lenovo/sm8650-common',
     'hardware/qcom-caf/sm8650',
     'hardware/qcom-caf/wlan',
     'vendor/qcom/opensource/commonsys/display',
@@ -105,10 +105,6 @@ OPENCL_SYMBOLS = (
 )
 
 blob_fixups: blob_fixups_user_type = {
-    'system_ext/lib64/libwfdnative.so': blob_fixup()
-        .add_needed('libinput_shim.so'),
-    'system_ext/lib64/libwfdservice.so': blob_fixup()
-        .replace_needed('android.media.audio.common.types-V4-cpp.so', 'android.media.audio.common.types-V5-cpp.so'),
     'system_ext/lib64/vendor.qti.hardware.qccsyshal@1.2-halimpl.so': blob_fixup()
         .replace_needed('libprotobuf-cpp-full.so', 'libprotobuf-cpp-full-21.7.so'),
     (
@@ -127,14 +123,8 @@ blob_fixups: blob_fixups_user_type = {
         'vendor/etc/seccomp_policy/qsap_qapeservice.policy',
     ): blob_fixup()
         .add_line_if_missing('lseek: 1'),
-    (
-        'vendor/lib64/c2.dolby.hevc.dec.so',
-        'vendor/lib64/c2.dolby.hevc.sec.dec.so',
-        'vendor/lib64/libqcodec2_core.so',
-    ): blob_fixup()
+    'vendor/lib64/libqcodec2_core.so': blob_fixup()
         .add_needed('libcodec2_shim.so'),
-    'vendor/lib64/c2.dolby.client.so': blob_fixup()
-        .add_needed('libcodec2_hidl_shim.so'),
     (
         'vendor/bin/hw/vendor.qti.hardware.display.composer-service',
         'vendor/lib64/libaodoptfeature.so',
@@ -156,41 +146,14 @@ blob_fixups: blob_fixups_user_type = {
         'vendor/lib64/liblistensoundmodel2vendor.so',
     ): blob_fixup()
         .replace_needed('libtensorflowlite_c.so', 'libtensorflowlite_c_vendor.so'),
-    (
-        'vendor/lib64/libpandora.algorithm.arcsoft.superportraitvideo.1.so',
-        'vendor/lib64/libpandora.algorithm.arcsoft.tablethdrchecker.1.so',
-        'vendor/lib64/libpandora.algorithm.arcsoft.tabletnormalhdr.1.so',
-        'vendor/lib64/libpandora.algorithm.arcsoft.tabletportraithdr.1.so',
-        'vendor/lib64/libpandora.algorithm.bst.filter.1.so',
-        'vendor/lib64/libpandora.algorithm.bst.tabletaicapture.1.so',
-        'vendor/lib64/libpandora.algorithm.bst.tabletsinglebokehcapture.1.so',
-        'vendor/lib64/libpandora.algorithm.camera.AlgorithmsDev.1.so',
-        'vendor/lib64/libpandora.algorithm.fotonation.facebeauty.1.so',
-        'vendor/lib64/libpandora.algorithm.lenovo.Watermark.1.so',
-        'vendor/lib64/libpandora.algorithm.morpho.tabletdccapture.1.so',
-        'vendor/lib64/libpandora.algorithm.morpho.tabletdcvideo.1.so',
-        'vendor/lib64/libpandora.algorithm.morpho.tabletdenoise.1.so',
-        'vendor/lib64/libpandora.algorithm.morpho.tabletsr.1.so',
-        'vendor/lib64/libpandora.algorithm.niklas.BmpWatermark.0.so',
-        'vendor/lib64/libpandora.algorithm.niklas.YUVRotator.0.so',
-        'vendor/lib64/libpandora.algorithm.niklas.YUVScaler.0.so',
-        'vendor/lib64/libpandora.so',
-    ): clear_opencl_versions(blob_fixup()),
-    (
-        'vendor/lib64/libFNVfbEngineHAL.so',
-        'vendor/lib64/libarcsoft_video_superportrait.so',
-    ): clear_nativewindow_versions(blob_fixup()),
-    'vendor/lib64/hw/gf_fingerprint.default.so': blob_fixup()
-        .fix_soname(),
 }  # fmt: skip
 
 module = ExtractUtilsModule(
-    'TB520FU',
+    'sm8650-common',
     'lenovo',
     blob_fixups=blob_fixups,
     lib_fixups=lib_fixups,
     namespace_imports=namespace_imports,
-    add_firmware_proprietary_file=True,
 )
 
 if __name__ == '__main__':

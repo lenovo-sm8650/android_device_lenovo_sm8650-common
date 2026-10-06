@@ -1,12 +1,3 @@
-# Imported from stock TB520FU ZUI_17.5.10.362 vendor/build.prop
-# should change this by project
-vendor.display.lcd_density=340
-#ro.sys.zui.param.c=0
-persist.sys.colormode_api=google
-persist.sys.colormode_modes=257:native;0:standard
-persist.sys.sf.color_temperature.warm=1.0,0.984378,0.9638465
-persist.sys.sf.color_temperature.cold=0.976217181,0.9782637656,1.0
-persist.sys.sf.color_temperature.standard=1.0,1.0,1.0
 ####################################
 ro.bionic.arch=arm64
 ro.bionic.cpu_variant=kryo300
@@ -60,8 +51,6 @@ ro.vendor.perf.scroll_opt=1
 vendor.perf.framepacing.enable=1
 wifi.aware.interface=wifi-aware0
 ro.incremental.enable=yes
-ro.surface_flinger.primary_display_orientation=ORIENTATION_270
-debug.sf.ignore_hwc_physical_display_orientation=true
 persist.vendor.radio.enableadvancedscan=true
 persist.sys.fuse.passthrough.enable=true
 persist.vendor.service.bdroid.soc.alwayson=true
@@ -297,35 +286,9 @@ debug.stagefright.c2inputsurface=-1
 debug.stagefright.ccodec=4
 debug.c2.use_dmabufheaps=1
 wifi.aware.interface=wifi-aware0
-ro.vendor.dolby.dax.version=DAX3_3.13.0.9_r1
 
 # Display (Lenovo addition on top of init.qti.display_boot.sh)
 vendor.display.disable_get_screen_decorator_support=1
 
 # Blur (notification shade, recents, dialogs); SM8650 handles it fine
 ro.surface_flinger.supports_background_blur=1
-
-# Camera: the camx HAL applies the Lenovo 3A/ISP tuning only while
-# vendor.camera.packagename.zui is set. The ZUI cameraserver sets it for its
-# own camera app; PixelOS never does, so every app got the dark untuned path.
-vendor.camera.packagename.zui=com.zui.camera
-
-# Lenovo device/pen identity from the stock vendor build.prop (ZUI_17.5.10.362).
-# PenService picks the settings screen (Pen Pro: battery, writing vibration,
-# brush effects) from pen.compat.project + pen_info; without them every pen
-# showed the generic capacitive pen page. ZuiUDevice uses the keyboard names.
-# ro.config.lgsi.* (system) is left out on purpose: apps treat it as ZUI
-# (except ro.config.lgsi.device.type, see system_ext.prop).
-ro.vendor.config.lgsi.cap_pen_info=monet_2
-ro.vendor.config.lgsi.pen.bluetooth_key.support=1
-ro.vendor.config.lgsi.pen.compat.project=1
-ro.vendor.config.lgsi.pen.event.name=NVTCapacitivePen
-ro.vendor.config.lgsi.pen_info=0x617F:0x17EF:Lenovo Tab Pen Plus;0x61A1:0x17EF:Lenovo Tab Pen Pro
-ro.vendor.config.lgsi.olympia_kb.name=Lenovo Wireless KB
-ro.vendor.config.lgsi.olympia_kb.name.row=Lenovo Multi-Device Wireless Keyboard
-ro.vendor.config.lgsi.device.type=pad
-ro.vendor.config.lgsi.hw.version=TB520FU
-ro.vendor.config.lgsi.market_name=Lenovo Yoga Tab Plus
-ro.vendor.config.lgsi.short_market_name=Lenovo Yoga Tab Plus
-ro.vendor.config.lgsi.project=lapis
-ro.vendor.config.lgsi.platform=qcom

@@ -13,17 +13,6 @@ persist.bluetooth.leaudio_offload.disabled=false
 ro.bluetooth.leaudio.le_audio_connection_by_default=false
 ro.bluetooth.leaudio_offload.supported=true
 
-# Display
-persist.settings.large_screen_opt.enabled=true
-
-# App handle -> split screen. The prebuilt Pixel Launcher reads
-# config_isDesktopModeSupported by Google's framework resource ID (0x011101f3),
-# which is config_hideNavBarForKeyboard (false) in the PixelOS framework, so it
-# never registered its split-select listener. With device restrictions off it
-# skips that resource check (desktop mode stays limited to what the config
-# and flags already allow on this device).
-persist.wm.debug.desktop_mode_enforce_device_restrictions=false
-
 # QTI value-add framework flag (stock system build.prop). Without it the camera
 # HAL assumes a GSI and builds the lanai_gsi.xml camera set (main + front only),
 # hiding the rear macro camera; libqti_vndfwk_detect reads it.
@@ -34,23 +23,3 @@ ro.vendor.qti.va_aosp.support=1
 # back to the missing factory keys (keymint -49).
 remote_provisioning.enable_rkpd=true
 remote_provisioning.hostname=remoteprovisioning.googleapis.com
-
-# Default color mode Adaptive (see config_availableColorModes in the overlay)
-persist.sys.sf.native_mode=2
-
-# Device type for the stock Lenovo apps (PenService, keyboard updaters,
-# ZuiUDevice, ZuiNotes). Stock init copies ro.vendor.config.lgsi.device.type
-# (vendor.prop: pad) here through /system/etc/init/lgsi_prop.cfg; our init does
-# not. Their bundled zui library (CommonUtils.isPadProduct) reads it: without
-# it MessageDialog/ActionDialog/AlertActivity fall back to the phone landscape
-# placement, docked bottom-right with a clipped height, instead of the centred
-# tablet dialogs. Only this key, not the rest of ro.config.lgsi.* (vendor.prop).
-ro.config.lgsi.device.type=pad
-
-# Brightness slider like stock ZUI: linear instead of the AOSP HLG gamma curve.
-# Stock maps the slider with brightness = a*s^2 + b*s + c (ro.sys.zui.param.*,
-# a=1e-10, b=0.15259, c=0 on the 0-65535 slider, i.e. linear), so 50% on the
-# slider is 50% backlight; HLG gives about 8%, which made 30-70% look much
-# darker than on ZUI while the peak was the same. AOSP SettingsLib has the
-# switch for this; label: sepolicy/private/property_contexts.
-sys.brightness.disable_gamma_conversion=true
