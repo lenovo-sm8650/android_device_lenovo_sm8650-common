@@ -774,6 +774,16 @@ vendor/etc/init/feature_enabler_client.rc
 # Display (HDR)
 vendor/lib64/libhdr_tm.so
 
+# Display (HDR): the dynamic metadata (HDR10+, HDR Vivid) tone mapping
+# libraries that libclstc_algorithm_adapter loads. The stock firmware lacks
+# them, so the composer tone mapped HDR10+ video with its static metadata
+# only. From the OnePlus Pad 2 (caihong) firmware, whose
+# libclstc_algorithm_adapter and libhdr_tm are identical to the stock ones;
+# staged in <dump>/caihong.
+caihong/vendor/lib64/libhdrdynamic.so:vendor/lib64/libhdrdynamic.so|c2534374797c1fd2c6bc728364f751c0d9c75804
+caihong/vendor/lib64/libhdrdynamicootf.so:vendor/lib64/libhdrdynamicootf.so|8f0a80d4adce7a30acf0a340246a55df26ba4906
+caihong/vendor/lib64/libhdrvivid.so:vendor/lib64/libhdrvivid.so|da52494edefa64580cd4a2b5460238cb42f1af11
+
 # Display (HWC)
 vendor/bin/hw/vendor.qti.hardware.display.composer-service;DISABLE_DEPS;REQUIRED=vendor.qti.hardware.display.composer-service.rc,vendor.qti.hardware.display.composer-service.xml
 vendor/bin/qdcmss
