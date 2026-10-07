@@ -104,7 +104,46 @@ OPENCL_SYMBOLS = (
     'clSetKernelArg',
 )
 
+# libar-pal (Lenovo): the Awinic smart PA code writes the speaker calibration
+# (Re) and voltage offsets to the ADSP when the speaker device starts, before
+# its playback graph runs, so it never finds the speaker protection module
+# and every write fails; its monitor thread, which could retry, is off
+# (monitor time 0). Wake the monitor thread on every start and make it write
+# the calibration again 0.5, 1 and 1.5 s later, once the graph runs. The
+# code replaces the per-device monitor loop, unused with monitor time 0
+# (see tools/awinic_cali.S).
+LIBAR_PAL_MONITOR_START = (
+    '08 01 00 d0 08 85 47 b9 88 01 00 34 00 e4 00 6f',  # cbz w8 (monitor time 0)
+    '08 01 00 d0 08 85 47 b9 1f 20 03 d5 00 e4 00 6f',  # nop
+)
+LIBAR_PAL_MONITOR_THREAD = (
+    '68 1a 40 b9 bf 43 1f b8 ff 13 00 b9 1f 05 00 71 8b 08 00 54 fa 03 1f aa 05 00 00 14 68 1a 80 b9',
+    ''.join((
+    '68 1e 40 b9 1f 0d 00 71 c1 03 00 54 88 00 80 52 '
+    '68 1e 00 b9 e0 03 14 aa 6e 34 00 94 7a 00 80 52 '
+    '00 24 94 52 e0 00 a0 72 be 16 00 94 ff 03 01 d1 '
+    'e0 43 00 91 c1 00 80 52 00 22 00 94 a0 01 f8 37 '
+    'a8 00 00 d0 08 b9 44 f9 08 01 40 f9 e8 1b 00 f9 '
+    'a8 00 00 d0 08 bd 44 f9 08 01 40 f9 e8 1f 00 f9 '
+    'e0 c3 00 91 e1 43 00 91 c2 00 80 52 f9 21 00 94 '
+    'ff 03 01 91 5a 07 00 71 41 fd ff 54 d2 ff ff 17 '
+    '28 00 00 14 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 '
+    '1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 '
+    '1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 '
+    '1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 '
+    '1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 '
+    '1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 '
+    '1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 '
+    '1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 '
+    '1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 '
+    '1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 1f 20 03 d5 '
+    )).strip(),
+)
+
 blob_fixups: blob_fixups_user_type = {
+    'vendor/lib64/libar-pal.so': blob_fixup()
+        .sig_replace(*LIBAR_PAL_MONITOR_START)
+        .sig_replace(*LIBAR_PAL_MONITOR_THREAD),
     'system_ext/lib64/vendor.qti.hardware.qccsyshal@1.2-halimpl.so': blob_fixup()
         .replace_needed('libprotobuf-cpp-full.so', 'libprotobuf-cpp-full-21.7.so'),
     (
