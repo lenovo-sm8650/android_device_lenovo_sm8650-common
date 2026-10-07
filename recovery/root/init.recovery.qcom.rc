@@ -36,3 +36,7 @@ on fs
     wait /sys/kernel/boot_adsp/boot
     write /sys/kernel/boot_adsp/boot 1
     wait /sys/class/power_supply/battery
+    # The ADSP is up: release the modem partition again, the installer
+    # unmounts every fstab entry before an install and aborts otherwise
+    # ("failed to unmount /vendor/firmware_mnt").
+    umount /vendor/firmware_mnt
