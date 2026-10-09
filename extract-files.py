@@ -105,6 +105,19 @@ OPENCL_SYMBOLS = (
 )
 
 blob_fixups: blob_fixups_user_type = {
+    # The SPU KeyMint links KeyMint V3; its provisioning library still names V2
+    # (a subset of V3), and both versions cannot be linked into one module.
+    'vendor/lib64/libspukeymintprovision.so': blob_fixup()
+        .replace_needed('android.hardware.security.keymint-V2-ndk.so',
+                        'android.hardware.security.keymint-V3-ndk.so'),
+    # It also names the sharedsecret V2 of its build, unfrozen here; every
+    # symbol it takes from it is in the frozen V1.
+    (
+        'vendor/bin/hw/android.hardware.security.keymint-service-spu-qti',
+        'vendor/lib64/libspukeymint.so',
+    ): blob_fixup()
+        .replace_needed('android.hardware.security.sharedsecret-V2-ndk.so',
+                        'android.hardware.security.sharedsecret-V1-ndk.so'),
     'system_ext/lib64/vendor.qti.hardware.qccsyshal@1.2-halimpl.so': blob_fixup()
         .replace_needed('libprotobuf-cpp-full.so', 'libprotobuf-cpp-full-21.7.so'),
     (

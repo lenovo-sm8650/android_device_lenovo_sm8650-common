@@ -329,6 +329,34 @@ vendor/lib64/libqtikeymaster4.so
 vendor/lib64/libqtikeymint.so
 vendor/lib64/libspcom.so
 
+# SPU (secure processing unit): StrongBox KeyMint and its RKP component, the
+# SPU daemons and the SPU gatekeeper, as on the stock firmware. The gatekeeper
+# stays the TEE one (vendor.gatekeeper.is_security_level_spu=0, as on stock).
+vendor/bin/hw/android.hardware.gatekeeper-service-spu-qti
+vendor/bin/hw/android.hardware.security.keymint-service-spu-qti
+vendor/bin/hw/vendor.qti.hardware.spu-service
+vendor/bin/hw/vendor.qti.spu@1.1-service
+vendor/bin/hw/vendor.qti.spu@2.0-service
+vendor/bin/renewDeviceIdsSPU
+vendor/bin/sec_nvm
+vendor/bin/spdaemon
+vendor/etc/init/android.hardware.gatekeeper-service-spu-qti.rc
+vendor/etc/init/android.hardware.security.keymint-service-spu-qti.rc
+vendor/etc/init/init.spdaemon.rc
+vendor/etc/init/init.spuservice.rc
+vendor/etc/init/init.vendor.qti.hardware.spu.service.rc
+vendor/etc/init/init.vendor.qti.spu@1.1-service.rc
+vendor/etc/permissions/sku_pineapple/android.hardware.strongbox_keystore.xml
+vendor/lib64/hw/libspuqtigatekeeper.so
+vendor/lib64/libspukeymint.so
+vendor/lib64/libspukeymintdeviceutils.so
+vendor/lib64/libspukeymintprovision.so
+vendor/lib64/libspukeymintutils.so
+vendor/lib64/vendor.qti.hardware.spu-V2-ndk.so
+vendor/lib64/vendor.qti.spu@1.0.so
+vendor/lib64/vendor.qti.spu@1.1.so
+vendor/lib64/vendor.qti.spu@2.0.so
+
 # Limits
 vendor/bin/hw/vendor.qti.hardware.limits@1.2-service
 vendor/etc/init/vendor.qti.hardware.limits-service.rc
