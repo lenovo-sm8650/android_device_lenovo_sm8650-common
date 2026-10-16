@@ -69,9 +69,9 @@ case "$target" in
                 ;;
             *)
                 setprop vendor.media.target_variant "_pineapple"
-                # TB520FU: the stock (Android 16) BSP value, also on newer
-                # Android releases; without it Netflix falls back to L3.
-                setprop vendor.netflix.bsp_rev "Q8650-37577-1"
+                if [ $build_codename -le "17" ]; then
+                    setprop vendor.netflix.bsp_rev "Q8650-37577-1"
+                fi
                 ;;
         esac
         ;;
