@@ -172,6 +172,28 @@ on post-fs
     chown system system /sys/devices/system/cpu/cpu7/cpufreq/scaling_governor
     chmod 666 /sys/devices/system/cpu/cpu7/cpufreq/scaling_governor
 
+    # create a cpuset for surfaceflinger
+        mkdir /dev/cpuset/sf
+        copy /dev/cpuset/cpus /dev/cpuset/sf/cpus
+        copy /dev/cpuset/mems /dev/cpuset/sf/mems
+        chown system system /dev/cpuset/sf/tasks
+        chown system system /dev/cpuset/sf/cpus
+        chown system system /dev/cpuset/sf/cgroup.procs
+        chmod 0664 /dev/cpuset/sf/cpus
+        chmod 0664 /dev/cpuset/sf/tasks
+        chmod 0664 /dev/cpuset/sf/cgroup.procs
+        mkdir /dev/cpuset/display
+        copy /dev/cpuset/cpus /dev/cpuset/display/cpus
+        copy /dev/cpuset/mems /dev/cpuset/display/mems
+        chown system system /dev/cpuset/display
+        chown system system /dev/cpuset/display/tasks
+        mkdir /dev/cpuctl/display
+        chown system system /dev/cpuctl/display
+        chown system system /dev/cpuctl/display/tasks
+        chown system system /dev/cpuctl/display/cgroup.procs
+        chmod 0664 /dev/cpuctl/display/tasks
+        chmod 0664 /dev/cpuctl/display/cgroup.procs
+
 on property:vendor.display.lcd_density=560
    setprop dalvik.vm.heapgrowthlimit 256m
 
@@ -448,6 +470,7 @@ on property:ro.vendor.tee_provision_deviceids=done
 #gpu test
 on property:debug.zui.antutu_status=1
     #start setup_on_gputest
+    setprop sys.ui.perfmode.enable 1
     write /sys/devices/system/cpu/bus_dcvs/LLCC/240b7400.qcom,bwmon-llcc/max_freq 1066000
     write /sys/devices/system/cpu/bus_dcvs/LLCC/240b7400.qcom,bwmon-llcc/min_freq 1066000
     write /sys/devices/system/cpu/bus_dcvs/LLCC/soc:qcom,memlat:llcc:gold/max_freq 1066000
@@ -489,6 +512,7 @@ on property:debug.zui.antutu_status=1
 #mem & cpu test
 on property:debug.zui.antutu_status=2
     #start setup_on_memtest
+    setprop sys.ui.perfmode.enable 1
     write /sys/class/kgsl/kgsl-3d0/idle_timer 80
     write /sys/devices/system/cpu/qcom_lpm/parameters/sleep_disabled 1
     #boost ufs
@@ -496,20 +520,24 @@ on property:debug.zui.antutu_status=2
 
 #UI test
 on property:debug.zui.antutu_status=3
+    setprop sys.ui.perfmode.enable 1
     write /sys/devices/platform/soc/1d84000.ufshc/clkscale_enable 1
 
 #storage test
 on property:debug.zui.antutu_status=4
     #boost ufs
+    setprop sys.ui.perfmode.enable 1
     write /sys/devices/platform/soc/1d84000.ufshc/clkscale_enable 0
 
 on property:debug.zui.antutu_status=0
     #restore ufs
+    setprop sys.ui.perfmode.enable 1
     write /sys/devices/platform/soc/1d84000.ufshc/clkscale_enable 1
 
 #test ends
 on property:debug.zui.antutu_status=-1
     #start restore_after_test
+    setprop sys.ui.perfmode.enable 0
     write /sys/class/kgsl/kgsl-3d0/idle_timer 80
     write /sys/devices/system/cpu/qcom_lpm/parameters/sleep_disabled 0
 
