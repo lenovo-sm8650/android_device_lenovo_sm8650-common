@@ -118,8 +118,6 @@ blob_fixups: blob_fixups_user_type = {
     ): blob_fixup()
         .replace_needed('android.hardware.security.sharedsecret-V2-ndk.so',
                         'android.hardware.security.sharedsecret-V1-ndk.so'),
-    'system_ext/lib64/vendor.qti.hardware.qccsyshal@1.2-halimpl.so': blob_fixup()
-        .replace_needed('libprotobuf-cpp-full.so', 'libprotobuf-cpp-full-21.7.so'),
     (
         'vendor/bin/qcc-vendor',
         'vendor/lib64/libqcc_sdk.so',
@@ -131,11 +129,6 @@ blob_fixups: blob_fixups_user_type = {
         'vendor/etc/media_codecs_pineapple.xml',
     ): blob_fixup()
         .regex_replace('.*media_codecs_(google_audio|google_c2|google_telephony|google_video|vendor_audio).*\n', ''),
-    (
-        'vendor/etc/seccomp_policy/qesdksec.policy',
-        'vendor/etc/seccomp_policy/qsap_qapeservice.policy',
-    ): blob_fixup()
-        .add_line_if_missing('lseek: 1'),
     'vendor/lib64/libqcodec2_core.so': blob_fixup()
         .add_needed('libcodec2_shim.so'),
     (

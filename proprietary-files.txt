@@ -987,6 +987,10 @@ vendor/etc/init/android.hardware.power-service.rc
 vendor/etc/powerhint.xml
 vendor/etc/vintf/manifest/power.xml:vendor/etc/vintf/manifest/android.hardware.power-service.xml
 
+# Vendor task profiles (SFMainPolicy and SFRenderEnginePolicy join the "sf" cpuset
+# that init.target.rc creates, new in the Android 17 stock firmware)
+vendor/etc/task_profiles.json
+
 # Dependencies (auto)
 vendor/lib64/libconfigdb.so
 vendor/lib64/libdsi_netctrl.so
