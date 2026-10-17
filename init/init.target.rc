@@ -130,7 +130,7 @@ on early-boot
     verity_update_state
 
 on boot
-    # GPU clock cap for the per-app performance profiles (tb520fu-input)
+    # GPU clock cap for the per-app performance profiles (lenovo-input)
     chown system system /sys/class/kgsl/kgsl-3d0/max_clock_mhz
     chmod 0664 /sys/class/kgsl/kgsl-3d0/max_clock_mhz
 
@@ -381,11 +381,11 @@ service setwlansardsi4 /vendor/bin/setwlansardsi4.sh
 #wifi sar feature by linshuai1, JLAPIS-252,at 2024-06-11 end
 
 # Stock ExWifiManagerService starts these with ctl.start from system_server;
-# here tb520fu-input (WifiSarController) sets the power index.
-on property:sys.tb520fu.wlan_sar=1
+# here lenovo-input (SarManager) sets the power index.
+on property:sys.lenovo.wlan_sar=1
     start setwlansardsi1
 
-on property:sys.tb520fu.wlan_sar=2
+on property:sys.lenovo.wlan_sar=2
     start setwlansardsi2
 
 #add for online lenovocust
