@@ -47,63 +47,6 @@ lib_fixups: lib_fixups_user_type = {
 }
 
 
-def clear_opencl_versions(fixup):
-    # Lenovo camera algorithm libs reference OpenCL symbols with OPENCL_x.y
-    # versions, but the Adreno libOpenCL exports them unversioned.
-    for symbol in OPENCL_SYMBOLS:
-        fixup = fixup.clear_symbol_version(symbol)
-    return fixup
-
-
-def clear_nativewindow_versions(fixup):
-    # AHardwareBuffer symbols are referenced as @LIBNATIVEWINDOW, but the
-    # vendor libnativewindow stub exports them unversioned.
-    for symbol in NATIVEWINDOW_SYMBOLS:
-        fixup = fixup.clear_symbol_version(symbol)
-    return fixup
-
-
-NATIVEWINDOW_SYMBOLS = (
-    'AHardwareBuffer_allocate',
-    'AHardwareBuffer_describe',
-    'AHardwareBuffer_lock',
-    'AHardwareBuffer_lockPlanes',
-    'AHardwareBuffer_release',
-    'AHardwareBuffer_unlock',
-)
-
-
-OPENCL_SYMBOLS = (
-    'clBuildProgram',
-    'clCreateBuffer',
-    'clCreateCommandQueue',
-    'clCreateCommandQueueWithProperties',
-    'clCreateContext',
-    'clCreateKernel',
-    'clCreateProgramWithBinary',
-    'clCreateProgramWithSource',
-    'clEnqueueCopyBuffer',
-    'clEnqueueFillBuffer',
-    'clEnqueueMapBuffer',
-    'clEnqueueNDRangeKernel',
-    'clEnqueueReadBuffer',
-    'clEnqueueUnmapMemObject',
-    'clFinish',
-    'clGetDeviceIDs',
-    'clGetDeviceInfo',
-    'clGetExtensionFunctionAddressForPlatform',
-    'clGetPlatformIDs',
-    'clGetPlatformInfo',
-    'clGetProgramBuildInfo',
-    'clGetProgramInfo',
-    'clReleaseCommandQueue',
-    'clReleaseContext',
-    'clReleaseKernel',
-    'clReleaseMemObject',
-    'clReleaseProgram',
-    'clSetKernelArg',
-)
-
 blob_fixups: blob_fixups_user_type = {
     # The SPU KeyMint links KeyMint V3; its provisioning library still names V2
     # (a subset of V3), and both versions cannot be linked into one module.
