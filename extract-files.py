@@ -18,7 +18,7 @@ from extract_utils.main import (
 )
 
 namespace_imports = [
-    'device/lenovo/TB520FU',
+    'device/lenovo/sm8650-common',
     'hardware/qcom-caf/sm8650',
     'hardware/qcom-caf/wlan',
     'vendor/qcom/opensource/commonsys/display',
@@ -47,70 +47,20 @@ lib_fixups: lib_fixups_user_type = {
 }
 
 
-def clear_opencl_versions(fixup):
-    # Lenovo camera algorithm libs reference OpenCL symbols with OPENCL_x.y
-    # versions, but the Adreno libOpenCL exports them unversioned.
-    for symbol in OPENCL_SYMBOLS:
-        fixup = fixup.clear_symbol_version(symbol)
-    return fixup
-
-
-def clear_nativewindow_versions(fixup):
-    # AHardwareBuffer symbols are referenced as @LIBNATIVEWINDOW, but the
-    # vendor libnativewindow stub exports them unversioned.
-    for symbol in NATIVEWINDOW_SYMBOLS:
-        fixup = fixup.clear_symbol_version(symbol)
-    return fixup
-
-
-NATIVEWINDOW_SYMBOLS = (
-    'AHardwareBuffer_allocate',
-    'AHardwareBuffer_describe',
-    'AHardwareBuffer_lock',
-    'AHardwareBuffer_lockPlanes',
-    'AHardwareBuffer_release',
-    'AHardwareBuffer_unlock',
-)
-
-
-OPENCL_SYMBOLS = (
-    'clBuildProgram',
-    'clCreateBuffer',
-    'clCreateCommandQueue',
-    'clCreateCommandQueueWithProperties',
-    'clCreateContext',
-    'clCreateKernel',
-    'clCreateProgramWithBinary',
-    'clCreateProgramWithSource',
-    'clEnqueueCopyBuffer',
-    'clEnqueueFillBuffer',
-    'clEnqueueMapBuffer',
-    'clEnqueueNDRangeKernel',
-    'clEnqueueReadBuffer',
-    'clEnqueueUnmapMemObject',
-    'clFinish',
-    'clGetDeviceIDs',
-    'clGetDeviceInfo',
-    'clGetExtensionFunctionAddressForPlatform',
-    'clGetPlatformIDs',
-    'clGetPlatformInfo',
-    'clGetProgramBuildInfo',
-    'clGetProgramInfo',
-    'clReleaseCommandQueue',
-    'clReleaseContext',
-    'clReleaseKernel',
-    'clReleaseMemObject',
-    'clReleaseProgram',
-    'clSetKernelArg',
-)
-
 blob_fixups: blob_fixups_user_type = {
-    'system_ext/lib64/libwfdnative.so': blob_fixup()
-        .add_needed('libinput_shim.so'),
-    'system_ext/lib64/libwfdservice.so': blob_fixup()
-        .replace_needed('android.media.audio.common.types-V4-cpp.so', 'android.media.audio.common.types-V5-cpp.so'),
-    'system_ext/lib64/vendor.qti.hardware.qccsyshal@1.2-halimpl.so': blob_fixup()
-        .replace_needed('libprotobuf-cpp-full.so', 'libprotobuf-cpp-full-21.7.so'),
+    # The SPU KeyMint links KeyMint V3; its provisioning library still names V2
+    # (a subset of V3), and both versions cannot be linked into one module.
+    'vendor/lib64/libspukeymintprovision.so': blob_fixup()
+        .replace_needed('android.hardware.security.keymint-V2-ndk.so',
+                        'android.hardware.security.keymint-V3-ndk.so'),
+    # It also names the sharedsecret V2 of its build, unfrozen here; every
+    # symbol it takes from it is in the frozen V1.
+    (
+        'vendor/bin/hw/android.hardware.security.keymint-service-spu-qti',
+        'vendor/lib64/libspukeymint.so',
+    ): blob_fixup()
+        .replace_needed('android.hardware.security.sharedsecret-V2-ndk.so',
+                        'android.hardware.security.sharedsecret-V1-ndk.so'),
     (
         'vendor/bin/qcc-vendor',
         'vendor/lib64/libqcc_sdk.so',
@@ -122,13 +72,6 @@ blob_fixups: blob_fixups_user_type = {
         'vendor/etc/media_codecs_pineapple.xml',
     ): blob_fixup()
         .regex_replace('.*media_codecs_(google_audio|google_c2|google_telephony|google_video|vendor_audio).*\n', ''),
-    (
-        'vendor/etc/seccomp_policy/qesdksec.policy',
-        'vendor/etc/seccomp_policy/qsap_qapeservice.policy',
-    ): blob_fixup()
-        .add_line_if_missing('lseek: 1'),
-    'vendor/etc/vintf/manifest/c2_manifest_vendor.xml': blob_fixup()
-        .regex_replace('.*IComponentStore/dolby.*\n', ''),
     'vendor/lib64/libqcodec2_core.so': blob_fixup()
         .add_needed('libcodec2_shim.so'),
     (
@@ -152,41 +95,14 @@ blob_fixups: blob_fixups_user_type = {
         'vendor/lib64/liblistensoundmodel2vendor.so',
     ): blob_fixup()
         .replace_needed('libtensorflowlite_c.so', 'libtensorflowlite_c_vendor.so'),
-    (
-        'vendor/lib64/libpandora.algorithm.arcsoft.superportraitvideo.1.so',
-        'vendor/lib64/libpandora.algorithm.arcsoft.tablethdrchecker.1.so',
-        'vendor/lib64/libpandora.algorithm.arcsoft.tabletnormalhdr.1.so',
-        'vendor/lib64/libpandora.algorithm.arcsoft.tabletportraithdr.1.so',
-        'vendor/lib64/libpandora.algorithm.bst.filter.1.so',
-        'vendor/lib64/libpandora.algorithm.bst.tabletaicapture.1.so',
-        'vendor/lib64/libpandora.algorithm.bst.tabletsinglebokehcapture.1.so',
-        'vendor/lib64/libpandora.algorithm.camera.AlgorithmsDev.1.so',
-        'vendor/lib64/libpandora.algorithm.fotonation.facebeauty.1.so',
-        'vendor/lib64/libpandora.algorithm.lenovo.Watermark.1.so',
-        'vendor/lib64/libpandora.algorithm.morpho.tabletdccapture.1.so',
-        'vendor/lib64/libpandora.algorithm.morpho.tabletdcvideo.1.so',
-        'vendor/lib64/libpandora.algorithm.morpho.tabletdenoise.1.so',
-        'vendor/lib64/libpandora.algorithm.morpho.tabletsr.1.so',
-        'vendor/lib64/libpandora.algorithm.niklas.BmpWatermark.0.so',
-        'vendor/lib64/libpandora.algorithm.niklas.YUVRotator.0.so',
-        'vendor/lib64/libpandora.algorithm.niklas.YUVScaler.0.so',
-        'vendor/lib64/libpandora.so',
-    ): clear_opencl_versions(blob_fixup()),
-    (
-        'vendor/lib64/libFNVfbEngineHAL.so',
-        'vendor/lib64/libarcsoft_video_superportrait.so',
-    ): clear_nativewindow_versions(blob_fixup()),
-    'vendor/lib64/hw/gf_fingerprint.default.so': blob_fixup()
-        .fix_soname(),
 }  # fmt: skip
 
 module = ExtractUtilsModule(
-    'TB520FU',
+    'sm8650-common',
     'lenovo',
     blob_fixups=blob_fixups,
     lib_fixups=lib_fixups,
     namespace_imports=namespace_imports,
-    add_firmware_proprietary_file=True,
 )
 
 if __name__ == '__main__':
