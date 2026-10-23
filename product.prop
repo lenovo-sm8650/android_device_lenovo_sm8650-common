@@ -14,8 +14,8 @@ audio.timecheck.timeout_duration_ms=8000
 media.stagefright.audio.deep=false
 ro.af.client_heap_size_kbyte=7168
 
-# Bluetooth (stock product profile set; without hid.host the Lenovo pen
-# HID/HOGP link and bas.client battery reporting are disabled)
+# Bluetooth (stock product profile set; hid.host and bas.client cover the
+# HID/HOGP peripherals and their battery reporting)
 bluetooth.device_id.vendor_id=0x001D
 bluetooth.profile.a2dp.source.enabled=true
 bluetooth.profile.avrcp.controller.enabled=true

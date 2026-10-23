@@ -24,7 +24,7 @@ ro.surface_flinger.use_color_management=true
 ro.surface_flinger.wcg_composition_dataspace=143261696
 ro.surface_flinger.protected_contents=true
 ro.surface_flinger.use_content_detection_for_refresh_rate=true
-# Stock ZUI timers (system build.prop): touch boost 2 s, idle (no frames) 2 s
+# Stock timers (system build.prop): touch boost 2 s, idle (no frames) 2 s
 ro.surface_flinger.set_touch_timer_ms=2000
 ro.surface_flinger.set_idle_timer_ms=2000
 ro.surface_flinger.force_hwc_copy_for_virtual_displays=true
@@ -288,7 +288,7 @@ debug.stagefright.ccodec=4
 debug.c2.use_dmabufheaps=1
 wifi.aware.interface=wifi-aware0
 
-# Display (Lenovo addition on top of init.qti.display_boot.sh)
+# Display (stock addition on top of init.qti.display_boot.sh)
 vendor.display.disable_get_screen_decorator_support=1
 
 # Blur (notification shade, recents, dialogs); SM8650 handles it fine
